@@ -1,4 +1,4 @@
-package ${package}.${moduleName}.entity;
+package ${package}.${moduleName};
 
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
@@ -16,32 +16,15 @@ import java.util.Date;
  * @email ${email}
  * @date ${datetime}
  */
-@TableName("${tableName}")
-public class ${className}Entity implements Serializable {
+ @Data
+public class ${className} implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 #foreach ($column in $columns)
 	/**
 	 * $column.comments
 	 */
-	#if($column.columnName == $pk.columnName)
-@TableId
-	#end
 private $column.attrType $column.attrname;
 #end
 
-#foreach ($column in $columns)
-	/**
-	 * 设置：${column.comments}
-	 */
-	public void set${column.attrName}($column.attrType $column.attrname) {
-		this.$column.attrname = $column.attrname;
-	}
-	/**
-	 * 获取：${column.comments}
-	 */
-	public $column.attrType get${column.attrName}() {
-		return $column.attrname;
-	}
-#end
 }

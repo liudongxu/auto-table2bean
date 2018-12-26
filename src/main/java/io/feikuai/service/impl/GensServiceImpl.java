@@ -29,12 +29,14 @@ import io.feikuai.dao.GensDAO;
 import io.feikuai.model.Column;
 import io.feikuai.model.Table;
 import io.feikuai.service.GensService;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * 代码生成服务实现类
  * @author liudo
  * @date 2018/12/26
  */
+@Slf4j
 @Service("gensService")
 public class GensServiceImpl implements GensService {
 	/**
@@ -115,7 +117,7 @@ public class GensServiceImpl implements GensService {
 			// 设置属性类型
 			column.setAttrType(typeConfiguration.getString(column.getDataType(), "unknow"));
 			// 是否主键
-			if ("PRI".equalsIgnoreCase(column.getColumnName())) {
+			if ("PRI".equalsIgnoreCase(column.getColumnKey())) {
 				table.setPk(column);
 			}
 		}
@@ -128,7 +130,7 @@ public class GensServiceImpl implements GensService {
 		// 封装模板数据
 		Map<String, Object> map = new HashMap<>();
 		map.put("tableName", table.getTableName());
-		map.put("comments", table.getComments());
+		map.put("comments", table.getComments() == null ? "" : table.getComments());
 		map.put("pk", table.getPk());
 		map.put("className", table.getClassName());
 		map.put("pathName", table.getClassName().toLowerCase());
@@ -166,6 +168,8 @@ public class GensServiceImpl implements GensService {
 		if (StringUtils.isNotBlank(packageName)) {
 			packagePath += packageName.replace(".", File.separator) + File.separator + moduleName + File.separator;
 		}
-		return packagePath + "entity" + File.separator + className + ".java";
+		String path = packagePath + className + ".java";
+		log.info("path:" + path);
+		return path;
 	}
 }

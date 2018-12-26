@@ -18,6 +18,11 @@ public class Column implements Serializable {
 	 * 列名
 	 */
 	private String columnName;
+
+	/**
+	 * 列 主外键
+	 */
+	private String columnKey;
 	/**
 	 * 列名类型
 	 */
