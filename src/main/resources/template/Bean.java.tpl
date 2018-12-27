@@ -1,7 +1,5 @@
 package ${package}.${moduleName};
 
-import com.baomidou.mybatisplus.annotations.TableId;
-import com.baomidou.mybatisplus.annotations.TableName;
 
 #if(${hasBigDecimal})
 import java.math.BigDecimal;
@@ -24,7 +22,7 @@ public class ${className} implements Serializable {
 	/**
 	 * $column.comments
 	 */
-private $column.attrType $column.attrname;
+private $column.attrType $column.attrName;
 #end
 
 }

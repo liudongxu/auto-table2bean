@@ -85,8 +85,11 @@ public class GensServiceImpl implements GensService {
 	@Resource(name = "typeConfiguration")
 	private Configuration typeConfiguration;
 
+	/**
+	 * 生成整个数据库表
+	 */
 	@Override
-	public byte[] gensCode() throws IOException {
+	public byte[] gensCodes() throws IOException {
 		List<Table> tables = gensDAO.queryTableList();
 		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 		ZipOutputStream zip = new ZipOutputStream(outputStream);
@@ -94,6 +97,20 @@ public class GensServiceImpl implements GensService {
 			List<Column> columns = gensDAO.queryColumns(table.getTableName());
 			gensCode(table, columns, zip);
 		}
+		IOUtils.closeQuietly(zip);
+		return outputStream.toByteArray();
+	}
+
+	/**
+	 * 生成指定表
+	 */
+	@Override
+	public byte[] gensCode(String tableName) throws IOException {
+		Table table = gensDAO.queryTable(tableName);
+		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+		ZipOutputStream zip = new ZipOutputStream(outputStream);
+		List<Column> columns = gensDAO.queryColumns(table.getTableName());
+		gensCode(table, columns, zip);
 		IOUtils.closeQuietly(zip);
 		return outputStream.toByteArray();
 	}
@@ -113,7 +130,8 @@ public class GensServiceImpl implements GensService {
 		table.setClassName(WordUtils.capitalizeFully(table.getTableName(), new char[]{'_'}).replace("_", ""));
 		for (Column column : columns) {
 			// 设置属性名称--把列表转换为java属性名
-			column.setAttrName(WordUtils.capitalizeFully(column.getColumnName(), new char[]{'_'}).replace("_", ""));
+			column.setAttrName(StringUtils
+					.uncapitalize(WordUtils.capitalizeFully(column.getColumnName(), new char[]{'_'}).replace("_", "")));
 			// 设置属性类型
 			column.setAttrType(typeConfiguration.getString(column.getDataType(), "unknow"));
 			// 是否主键

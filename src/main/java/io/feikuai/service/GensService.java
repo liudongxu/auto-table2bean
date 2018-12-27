@@ -9,5 +9,7 @@ import java.io.IOException;
  */
 public interface GensService {
 
-	byte[] gensCode() throws IOException;
+	byte[] gensCodes() throws IOException;
+
+	byte[] gensCode(String tableName) throws IOException;
 }
